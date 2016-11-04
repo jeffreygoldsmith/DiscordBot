@@ -4,7 +4,7 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "test": "nodemon bot.js"
+    "test": "node bot.js"
   },
   "author": "Jeffrey",
   "license": "MIT",
