@@ -23,6 +23,11 @@ client.Dispatcher.on("GATEWAY_READY", e => {
 client.Dispatcher.on("MESSAGE_CREATE", e => {
   console.log('Message Recieved'); // Log that a message was recieved
 
+  if (e.message.content === "liam") // Check to see if input is ping
+  {
+    e.message.channel.sendMessage("is the best"); // Send back pong
+  }
+
   if (e.message.content === "Jekbot who is a pleb?") // Check to see if input is ping
   {
     e.message.channel.sendMessage("Carlos is a pleb"); // Send back pong
