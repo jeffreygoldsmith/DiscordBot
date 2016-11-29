@@ -4,32 +4,65 @@
  * Description: A discord bot with arbitrary functions
  */
 
-const Discordie = require("discordie"); // Import Discordie library
+ // import the discord.js module
+ const Discord = require('discord.js');
 
-const client = new Discordie();
+ // create an instance of a Discord Client, and call it bot
+ const bot = new Discord.Client();
 
-// Connect to Discord server using bot token
-client.connect({
-  token: "MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA" // Bot token
-});
+ // the token of your bot - https://discordapp.com/developers/applications/me
+ const token = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA';
 
-client.Dispatcher.on("GATEWAY_READY", e => {
-  console.log("Connected as: " + client.User.username); // Print a connected message including the current username
-});
+ // the ready event is vital, it means that your bot will only start reacting to information
+ // from Discord _after_ ready is emitted.
+ bot.on('ready', () => {
+   console.log('I am ready!');
+ });
 
-//
-// Use ping/pong system to test message sending.
-//
-client.Dispatcher.on("MESSAGE_CREATE", e => {
-  console.log('Message Recieved'); // Log that a message was recieved
+ // // create an event listener for messages
+ // bot.on('message', message => {
+ //   // if the message is "ping",
+ //   if (message.content === 'enter')
+ //   {
+ //
+ //     //console.log(message.guild.channels);
+ //     message.guild.channels.forEach((channel) => {
+ //       if (channel.name === 'League of Legends')
+ //       {
+ //         channel.join();
+ //       }
+ //     });
+ //   }
+ //
+ //   if (message.content === 'leave') {
+ //         channel.leave();
+ //       }
+ //     });
+ //   }
+ // });
 
-  if (e.message.content === "liam") // Check to see if input is ping
-  {
-    e.message.channel.sendMessage("is the best"); // Send back pong
-  }
+ // create an event listener for messages
+ bot.on('message', message => {
+   // if the message is "ping",
+   if (message.content === '!slo')
+   {
+     const author = message.author;
 
-  if (e.message.content === "Jekbot who is a pleb?") // Check to see if input is ping
-  {
-    e.message.channel.sendMessage("Carlos is a pleb"); // Send back pong
-  }
-});
+     message.guild.channels.forEach((channel) => {
+       if (channel.type === 'voice')
+       {
+         channel.members.forEach((member) => {
+           if (member.id === author.id)
+           {
+             channel.join().then(connection => {
+               const dispatcher = connection.playFile('../lib/Sounds/airhorn.mp3');
+             }).catch(console.error);
+           }
+         });
+       }
+     });
+   }
+ });
+
+ // log our bot in
+ bot.login(token);
