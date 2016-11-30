@@ -4,65 +4,81 @@
  * Description: A discord bot with arbitrary functions
  */
 
- // import the discord.js module
- const Discord = require('discord.js');
+const Discord = require('discord.js'); // Import the discord.js module
+const bot = new Discord.Client(); // Create an instance of a Discord Client, and call it bot
+const token = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA'; // Bot token
 
- // create an instance of a Discord Client, and call it bot
- const bot = new Discord.Client();
 
- // the token of your bot - https://discordapp.com/developers/applications/me
- const token = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA';
+const slowpokeSoundNames = [
+  'slopoke.mp3',
+  'slopokelong.mp3',
+  'slowpokeslow.mp3',
+  'slowslowslow.mp3',
+];
 
- // the ready event is vital, it means that your bot will only start reacting to information
- // from Discord _after_ ready is emitted.
- bot.on('ready', () => {
-   console.log('I am ready!');
- });
+const RANDOM_MAX = slowpokeSoundNames.length - 1;
+const RANDOM_MIN = 0;
 
- // // create an event listener for messages
- // bot.on('message', message => {
- //   // if the message is "ping",
- //   if (message.content === 'enter')
- //   {
- //
- //     //console.log(message.guild.channels);
- //     message.guild.channels.forEach((channel) => {
- //       if (channel.name === 'League of Legends')
- //       {
- //         channel.join();
- //       }
- //     });
- //   }
- //
- //   if (message.content === 'leave') {
- //         channel.leave();
- //       }
- //     });
- //   }
- // });
 
- // create an event listener for messages
- bot.on('message', message => {
-   // if the message is "ping",
-   if (message.content === '!slo')
-   {
-     const author = message.author;
+//
+// Return a random number within a range.
+//
+function getRandomInt(min, max)
+{
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-     message.guild.channels.forEach((channel) => {
-       if (channel.type === 'voice')
-       {
-         channel.members.forEach((member) => {
-           if (member.id === author.id)
-           {
-             channel.join().then(connection => {
-               const dispatcher = connection.playFile('../lib/Sounds/airhorn.mp3');
-             }).catch(console.error);
-           }
-         });
-       }
-     });
-   }
- });
 
- // log our bot in
- bot.login(token);
+bot.on('ready', () => {
+ console.log('I am ready!'); // Signal that bot has launched
+});
+
+
+//
+// Event listener for text messages.
+//
+bot.on('message', message => {
+
+  if (message.content === '!slow')
+  {
+   const author = message.author;
+
+   message.guild.channels.forEach((channel) => {
+     if (channel.type === 'voice')
+     {
+       channel.members.forEach((member) => {
+         if (member.id === author.id)
+         {
+           const randomNum = getRandomInt(RANDOM_MIN, RANDOM_MAX);
+           const path = '../lib/Sounds/' + slowpokeSoundNames[randomNum];
+
+           channel.join().then(connection => {
+             const dispatcher = connection.playFile(path);
+           }).catch(console.error);
+         }
+       });
+     }
+   });
+  }
+
+  //! My jank way of getting the bot to leave for now
+  if (message.content === '!leave')
+  {
+   const author = message.author;
+
+   message.guild.channels.forEach((channel) => {
+     if (channel.type === 'voice')
+     {
+       channel.members.forEach((member) => {
+         if (member.id === author.id)
+         {
+           channel.leave();
+         }
+       });
+     }
+   });
+  }
+});
+
+// log Jekbot in
+bot.login(token);
