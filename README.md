@@ -1,3 +1,3 @@
-# DiscordBot
+# Jekbot
 
-A discord bot for our personal server that has arbitrary functions.
+A discord bot that uses Discord.js for my personal use that has arbitrary functions.
