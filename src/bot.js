@@ -1,13 +1,15 @@
 /*
- * Authors: Jeffrey Goldsmith and Liam Armstrong
+ * Authors: Jeffrey Goldsmith, Liam Armstrong, and Brendan Leder
  *
  * Description: A discord bot with arbitrary functions
  */
 
+const TOKEN = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA'; // Bot token
+
+// Import dependencies
 const Discord = require('discord.js'); // Import the discord.js module
 const wavFileInfo = require('wav-file-info'); // Import .wav metadata grabber API
 const bot = new Discord.Client(); // Create an instance of a Discord Client, and call it bot
-const token = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA'; // Bot token
 
 const slowpokeSoundNames = [
   'slowpoke.wav',
@@ -19,15 +21,7 @@ const slowpokeSoundNames = [
 const RANDOM_MAX = slowpokeSoundNames.length - 1;
 const RANDOM_MIN = 0;
 const CARLOS_ID = '173595969311604736';
-const DEFAULT_DELAY = 50;
-
-
-const getAudioLength = (path) => {
-  wavFileInfo.infoByFilename(path, function (err, info) {
-    if (err) throw err;
-    return info.duration.toFixed(2) * 1000;
-  });
-};
+const DEFAULT_DELAY = 10;
 
 
 // Return a random number within a range.
@@ -47,54 +41,49 @@ bot.on('ready', () => {
 //
 bot.on('message', message => {
 
+  // Check message content
   if (message.content === '!slow')
   {
-   const author = message.author;
+    var isChannelFound = false; // Flag to detect if a voice channel corresponding to the message author is found
+    const author = message.author; // Message author
 
-   message.guild.channels.forEach((channel) => {
-     if (channel.type === 'voice')
-     {
-       channel.members.forEach((member) => {
-         if (member.id === author.id)
-         {
-           const randomNum = getRandomInt(RANDOM_MIN, RANDOM_MAX);
-           const path = '../lib/Sounds/' + slowpokeSoundNames[randomNum];
-           const audioDelay = getAudioLength(path) + DEFAULT_DELAY;
+    // Search for the voice channel that the user is in
+    message.guild.channels.forEach((channel) => {
+      if (channel.type === 'voice')
+      {
+        channel.members.forEach((member) => {
+          if (member.id === author.id)
+          {
+            isChannelFound = true;
+            const randomNum = getRandomInt(RANDOM_MIN, RANDOM_MAX); // Get random number to index audio file array
+            const path = '../lib/Sounds/' + slowpokeSoundNames[randomNum]; // Choose audio file to play and create a path string for it
 
-           setTimeout(() => {
-             channel.join().then(connection => {
-               const dispatcher = connection.playFile(path);
-             }).catch(console.error);
-           }, DEFAULT_DELAY);
+            // Enter the channel that the user is currently in
+            channel.join().then(connection => {
+              const dispatcher = connection.playFile(path); // Play the file
 
+              // Get the length of the audio from the file metadata
+              wavFileInfo.infoByFilename(path, function (err, info) {
+                if (err) throw err; // Exit if an error is non nil
 
-           setTimeout(() => {
-             channel.leave();
-           }, audioDelay);
-         }
-       });
-     }
-   });
-  }
+                // Disconnect after the duration of the audio clip in miliseconds
+                setTimeout(() => {
+                  connection.disconnect();
+                }, info.duration * 1000);
+              });
+            }).catch(console.error); // Print any errors
+          }
+        });
+      }
+    });
 
-  //! My jank way of getting the bot to leave for now
-  if (message.content === '!leave')
-  {
-   const author = message.author;
-
-   message.guild.channels.forEach((channel) => {
-     if (channel.type === 'voice')
-     {
-       channel.members.forEach((member) => {
-         if (member.id === author.id)
-         {
-           channel.leave();
-         }
-       });
-     }
-   });
+    // If the user is not in a voice channel, reply with an error message
+    if (!isChannelFound)
+    {
+      message.reply('Silly Billy, you have to be in a voice channel to do that!');
+    }
   }
 });
 
-// log Jekbot in
-bot.login(token);
+// Log Jekbot in
+bot.login(TOKEN);
