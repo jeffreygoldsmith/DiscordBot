@@ -10,9 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "^10.0.1",
-    "discordie": "^0.9.0",
-    "mp3-duration": "^1.0.10",
-    "mp3-length": "^1.0.0",
     "wav-file-info": "0.0.7"
   }
 }
