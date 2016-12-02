@@ -10,21 +10,28 @@ const bot = new Discord.Client(); // Create an instance of a Discord Client, and
 const token = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA'; // Bot token
 
 const slowpokeSoundNames = [
-  'slowpoke.mp3',
-  'slowpokelong.mp3',
-  'slowpokeslow.mp3',
-  'slowslowslow.mp3',
+  'slowpoke.wav',
+  'slowpokelong.wav',
+  'slowpokeslow.wav',
+  'slowslowslow.wav',
 ];
 
 const RANDOM_MAX = slowpokeSoundNames.length - 1;
 const RANDOM_MIN = 0;
 const CARLOS_ID = '173595969311604736';
+const DEFAULT_DELAY = 50;
 
 
-//
+const getAudioLength = (path) => {
+  wavFileInfo.infoByFilename(path, function (err, info) {
+    if (err) throw err;
+    return info.duration.toFixed(2) * 1000;
+  });
+};
+
+
 // Return a random number within a range.
-//
-function getRandomInt(min, max)
+const getRandomInt = (min, max) =>
 {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -52,11 +59,18 @@ bot.on('message', message => {
          {
            const randomNum = getRandomInt(RANDOM_MIN, RANDOM_MAX);
            const path = '../lib/Sounds/' + slowpokeSoundNames[randomNum];
+           const audioDelay = getAudioLength(path) + DEFAULT_DELAY;
 
-           channel.join().then(connection => {
-             const dispatcher = connection.playFile(path);
-           }).catch(console.error);
-          // console.log(message.guild.members);
+           setTimeout(() => {
+             channel.join().then(connection => {
+               const dispatcher = connection.playFile(path);
+             }).catch(console.error);
+           }, DEFAULT_DELAY);
+
+
+           setTimeout(() => {
+             channel.leave();
+           }, audioDelay);
          }
        });
      }
