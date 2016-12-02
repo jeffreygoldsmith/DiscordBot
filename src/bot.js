@@ -8,6 +8,7 @@ const TOKEN = 'MjQzODk3NDI2ODYyMTQ1NTM2.Cv1yJw.9m-SXSeZj8d-OwrgDYOt3aZggVA'; // 
 
 // Import dependencies
 const Discord = require('discord.js'); // Import the discord.js module
+const ytdl = require('ytdl-core');
 const wavFileInfo = require('wav-file-info'); // Import .wav metadata grabber API
 const bot = new Discord.Client(); // Create an instance of a Discord Client, and call it bot
 
@@ -40,13 +41,13 @@ bot.on('ready', () => {
 // Event listener for text messages.
 //
 bot.on('message', message => {
+  var isChannelFound = false; // Flag to detect if a voice channel corresponding to the message author is found
+  const author = message.author; // Message author
+
 
   // Check message content
   if (message.content === '!slow')
   {
-    var isChannelFound = false; // Flag to detect if a voice channel corresponding to the message author is found
-    const author = message.author; // Message author
-
     // Search for the voice channel that the user is in
     message.guild.channels.forEach((channel) => {
       if (channel.type === 'voice')
@@ -82,6 +83,58 @@ bot.on('message', message => {
     {
       message.reply('Silly Billy, you have to be in a voice channel to do that!');
     }
+  }
+
+
+  // Check message content
+  if (message.content.startsWith('!stream'))
+  {
+    const parsedInput = message.content.split(' ');
+
+    // Search for the voice channel that the user is in
+    message.guild.channels.forEach((channel) => {
+      if (channel.type === 'voice')
+      {
+        channel.members.forEach((member) => {
+          if (member.id === author.id)
+          {
+            isChannelFound = true;
+
+            // play streams using ytdl-core
+            const streamOptions = { seek: 0, volume: 0.1 };
+            channel.join().then(connection => {
+              const stream = ytdl(parsedInput[1], {filter : 'audioonly'});
+              const dispatcher = connection.playStream(stream, streamOptions);
+            })
+            .catch(console.error);
+          }
+        });
+      }
+    });
+
+    // If the user is not in a voice channel, reply with an error message
+    if (!isChannelFound)
+    {
+      message.reply('Silly Billy, you have to be in a voice channel to do that!');
+    }
+  }
+
+
+  // Check message content
+  if (message.content === '!stop')
+  {
+    // Search for the voice channel that the user is in
+    message.guild.channels.forEach((channel) => {
+      if (channel.type === 'voice')
+      {
+        channel.members.forEach((member) => {
+          if (member.id === author.id)
+          {
+            channel.leave();
+          }
+        });
+      }
+    });
   }
 });
 
