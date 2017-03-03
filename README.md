@@ -4,12 +4,13 @@ A discord bot that uses Discord.js for my personal use that has arbitrary functi
 
 ##Setup
 
-1. Download this repository using the green download button and put it onto your desktop
-2. Install the current Nodejs build using this link: https://nodejs.org/en/
-3. Once installed, open Terminal or Command Prompt
-4. Navigate to the repository folder on your desktop using the command prompt. Use the `cd` (change directory) and `ls` (list files in current directory, for PC this command is `dir`) commands to get to your desktop. If you have trouble watch a video on the topic: https://www.youtube.com/results?search_query=how+to+navigate+terminal. Once you are in the directory of the repository, your terminal should say something like this: '~/Desktop/github/DiscordBot'.
-5. Now type `npm install` into the terminal and press enter
-6. Once this command finishes running type `npm start` to run the bot!
+1. Add this bot to your server. To do this the owner of the server must click this link: https://discordapp.com/oauth2/authorize?client_id=254445624202756096&scope=bot&permissions=0 to add the bot
+2. Download this repository using the green download button and put it onto your desktop
+3. Install the current Nodejs build using this link: https://nodejs.org/en/
+4. Once installed, open Terminal or Command Prompt
+5. Navigate to the repository folder on your desktop using the command prompt. Use the `cd` (change directory) and `ls` (list files in current directory, for PC this command is `dir`) commands to get to your desktop. If you have trouble watch a video on the topic: https://www.youtube.com/results?search_query=how+to+navigate+terminal. Once you are in the directory of the repository, your terminal should say something like this: '~/Desktop/github/DiscordBot'.
+6. Now type `npm install` into the terminal and press enter
+7. Once this command finishes running type `npm start` to run the bot!
 
 ##Adding Sounds
 To add sounds, copy and paste the code below into the MessageHandlers.js file, replacing the highlighted items with your version. You will have to replace things wherever it says `yourClipNameHere`, `yourCommandNameHere`, and the `const path` variable with your file path with single quotes on either side. Look at the `const path` variable in the `handlers.slow = (message, author) =>` if you have trouble. 
