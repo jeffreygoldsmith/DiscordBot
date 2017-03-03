@@ -13,8 +13,9 @@ A discord bot that uses Discord.js for my personal use that has arbitrary functi
 
 ##Adding Sounds
 To add sounds, copy and paste the code below into the MessageHandlers.js file, replacing the highlighted items with your version. You will have to replace things wherever it says `yourClipNameHere`, `yourCommandNameHere`, and the `const path` variable with your file path with single quotes on either side. Look at the `const path` variable in the `handlers.slow = (message, author) =>` if you have trouble. 
-`
-//
+
+
+`//
 // Message handler for !yourCommandNameHere command -- Enters the channel to play a yourClipNameHere audio clip and then leaves
 //
 handlers.yourCommandNameHere = (message, author) =>
@@ -42,20 +43,17 @@ handlers.yourCommandNameHere = (message, author) =>
   }
   
   return channelFound;
-}
-`
+}`
 
 After you are done this, add the following code to the bot.js file inside of the `bot.on('message', message => {` function. Look at the other functions in there for some guidance on where to place it.
 
-`
-// Check message content
+`// Check message content
 if (message.content === '!yourCommandNameHere')
 {
   isChannelFound = MessageHandler.yourCommandNameHere(message, author);
 
   // If the user is not in a voice channel, reply with an error message
   channelFound(message, isChannelFound);
-}
-`
+}`
 
 Then restart the bot and type in your command!
