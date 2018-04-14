@@ -71,6 +71,7 @@ bot.on('message', message => {
 // Log Jekbot in
 bot.login(jekbot.token);
 
+// Set port
 app.set('port', (process.env.PORT || 5000))
 
 app.get('/', function(request, response) {
