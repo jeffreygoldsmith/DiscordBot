@@ -4,6 +4,8 @@
  * Description: A discord bot with arbitrary functions
  */
 
+const express = require('express')
+const app = express()
 const jekbot = {token: 'MjU0NDQ1NjI0MjAyNzU2MDk2.CyPKew.3JEyRFwd-Ym3QdRK90FZ0I-L7aA', id: '254445624202756096'};
 const Discord = require('discord.js'); // Import the discord.js module
 const MessageHandler = require('../lib/components/MessageHandlers.js');
@@ -68,3 +70,13 @@ bot.on('message', message => {
 
 // Log Jekbot in
 bot.login(jekbot.token);
+
+app.set('port', (process.env.PORT || 5000))
+
+app.get('/', function(request, response) {
+  response.send('Hello World!')
+})
+
+app.listen(app.get('port'), function() {
+  console.log("Node app is running at localhost:" + app.get('port'))
+})
