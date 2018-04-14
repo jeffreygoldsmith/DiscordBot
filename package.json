@@ -4,7 +4,8 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "test": "node bot.js"
+    "test": "node bot.js",
+    "start": "node src/bot.js"
   },
   "author": "Jeffrey",
   "license": "MIT",
