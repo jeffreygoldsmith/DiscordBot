@@ -22,7 +22,7 @@ const channelFound = (message, flg) =>
   // If the user is not in a voice channel, reply with an error message
   if (!flg)
   {
-    message.reply('Silly Billy, you have to be in a voice channel to do that!');
+    message.reply('you dumbass, you have to be in a voice channel to do that!');
   }
 }
 
